@@ -1,0 +1,71 @@
+# ============================================================
+# Prediction Market Trading Bot — Dependencies
+# ============================================================
+# REQUIRES: Python 3.13 (use .venv created with python3.13)
+#
+# INSTALLATION (run from project root):
+#   python3.13 -m venv .venv
+#   source .venv/bin/activate
+#   pip install web3==6.14.0 --no-deps
+#   pip install eth-abi eth-account "eth-hash[pycryptodome]" eth-typing \
+#               eth-utils hexbytes jsonschema "lru-dict==1.2.0" \
+#               pyunormalize requests websockets aiohttp protobuf
+#   pip install py-clob-client
+#   pip install -r requirements.txt
+#
+# WHY --no-deps for web3:
+#   web3==6.14.0 pins ckzg to an old version with no Python 3.13 wheels.
+#   ckzg is only needed for Ethereum blob transactions (EIP-4844), which
+#   Polymarket/Polygon never uses. py-clob-client installs ckzg 2.x which
+#   does have Python 3.13 wheels and is compatible.
+#   Never upgrade web3 to 7.x — py-clob-client requires 6.x.
+#
+# AFTER INSTALL: Remove web3's broken pytest plugin entry point:
+#   sed -i '' '/pytest_ethereum/d' \
+#     .venv/lib/python3.13/site-packages/web3-6.14.0.dist-info/entry_points.txt
+#   (web3's pytest helpers require old eth-typing; we don't use them)
+# ============================================================
+
+# === Terminal UI ===
+textual>=0.80.0
+rich>=14.0.0
+
+# === Prediction Market Exchange SDKs ===
+py-clob-client>=0.34.0          # Polymarket — installs ckzg 2.x with Py3.13 wheels
+web3==6.14.0                    # PINNED — 7.x breaks py-clob-client; install --no-deps first
+
+# === Async HTTP & WebSockets ===
+aiohttp>=3.9.0
+websockets>=12.0
+
+# === Data Processing ===
+pandas>=2.0.0
+numpy>=1.24.0
+
+# === Configuration ===
+python-dotenv>=1.0.0
+
+# === Sentiment Analysis ===
+# VADER: lightweight, no model download, <1ms inference — default
+vaderSentiment>=3.3.2
+# TextBlob: secondary sentiment scoring
+textblob>=0.17.1
+
+# === HTTP (sync, for non-async contexts) ===
+requests>=2.32.0
+
+# === Cryptography (for Kalshi RSA auth) ===
+cryptography>=42.0.0
+
+# === Notifications ===
+python-telegram-bot>=21.0
+
+# === Date/Time Utilities ===
+python-dateutil>=2.9.0
+
+# ============================================================
+# OPTIONAL / FUTURE:
+# transformers>=4.40.0          # For FinBERT sentiment (requires torch)
+# torch>=2.0.0                  # Required for FinBERT
+# kalshi-python>=2.0.0          # Official Kalshi SDK (use if available)
+# ============================================================
