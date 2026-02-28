@@ -66,3 +66,7 @@ exports/
 
 # Jupyter (if ever used)
 .ipynb_checkpoints/
+.env
+*.env
+__pycache__/
+.DS_Store
